@@ -1,6 +1,7 @@
 //! Less used details of `CxxVector` are exposed in this module. `CxxVector`
 //! itself is exposed at the crate root.
 
+use crate::CxxWString;
 use crate::extern_type::ExternType;
 use crate::kind::Trivial;
 use crate::string::CxxString;
@@ -490,3 +491,4 @@ impl_vector_element_for_primitive!(f32);
 impl_vector_element_for_primitive!(f64);
 
 impl_vector_element!(opaque, "string", "CxxString", CxxString);
+impl_vector_element!(opaque, "string", "CxxWString", CxxWString);
