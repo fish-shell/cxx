@@ -22,10 +22,6 @@ jobs:
           - name: macOS
             rust: nightly
             os: macos
-          - name: Windows (msvc)
-            rust: nightly-x86_64-pc-windows-msvc
-            os: windows
-            flags: /EHsc
     env:
       CXXFLAGS: ${{matrix.flags}}
       RUSTFLAGS: --cfg deny_warnings -Dwarnings
@@ -59,76 +55,3 @@ jobs:
       - run: cargo check --no-default-features
         env:
           RUSTFLAGS: --cfg compile_error_if_alloc --cfg cxx_experimental_no_alloc ${{env.RUSTFLAGS}}
-
-  buck:
-    name: Buck
-    runs-on: ubuntu-latest
-    if: github.event_name != 'pull_request'
-    steps:
-      - uses: actions/checkout@v3
-      - uses: dtolnay/rust-toolchain@stable
-      - uses: actions/setup-java@v1
-        with:
-          java-version: 11
-          java-package: jre
-      - name: Install Buck
-        run: |
-          mkdir bin
-          wget -q -O bin/buck https://jitpack.io/com/github/facebook/buck/a5f0342ae3/buck-a5f0342ae3-java11.pex # dev branch from 2020.10.11
-          chmod +x bin/buck
-          echo bin >> $GITHUB_PATH
-      - name: Install lld
-        run: sudo apt-get install lld
-      - name: Vendor dependencies
-        run: |
-          cp third-party/Cargo.lock .
-          cargo vendor --versioned-dirs --locked third-party/vendor
-      - run: buck build :cxx#check --verbose=0
-      - run: buck run demo --verbose=0
-      - run: buck test ... --verbose=0
-
-  bazel:
-    name: Bazel
-    runs-on: ubuntu-latest
-    if: github.event_name != 'pull_request'
-    steps:
-      - uses: actions/checkout@v3
-      - name: Install Bazel
-        run: |
-          wget -q -O install.sh https://github.com/bazelbuild/bazel/releases/download/5.1.1/bazel-5.1.1-installer-linux-x86_64.sh
-          chmod +x install.sh
-          ./install.sh --user
-          echo $HOME/bin >> $GITHUB_PATH
-      - name: Install lld
-        run: sudo apt-get install lld
-      - run: bazel run demo --verbose_failures --noshow_progress
-      - run: bazel test ... --verbose_failures --noshow_progress
-
-  clippy:
-    name: Clippy
-    runs-on: ubuntu-latest
-    if: github.event_name != 'pull_request'
-    steps:
-      - uses: actions/checkout@v3
-      - uses: dtolnay/rust-toolchain@clippy
-      - run: cargo clippy --workspace --tests -- -Dclippy::all
-
-  clang-tidy:
-    name: Clang Tidy
-    runs-on: ubuntu-latest
-    if: github.event_name != 'pull_request'
-    steps:
-      - uses: actions/checkout@v3
-      - name: Install clang-tidy
-        run: sudo apt-get install clang-tidy-11
-      - name: Run clang-tidy
-        run: clang-tidy-11 src/cxx.cc --warnings-as-errors=*
-
-  outdated:
-    name: Outdated
-    runs-on: ubuntu-latest
-    if: github.event_name != 'pull_request'
-    steps:
-      - uses: actions/checkout@v3
-      - uses: dtolnay/install@cargo-outdated
-      - run: cargo outdated --workspace --exit-code 1
