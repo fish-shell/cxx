@@ -88,7 +88,7 @@ pub struct CxxWString {
 #[macro_export]
 macro_rules! let_cxx_wstring {
     ($var:ident = $value:expr $(,)?) => {
-        let mut cxx_stack_string = $crate::private::StackString::new();
+        let mut cxx_stack_string = $crate::private::StackWString::new();
         #[allow(unused_mut, unused_unsafe)]
         let mut $var = match $value {
             let_cxx_string => unsafe { cxx_stack_string.init(let_cxx_string) },
