@@ -11,7 +11,7 @@ use core::marker::{PhantomData, PhantomPinned};
 use core::mem::MaybeUninit;
 use core::pin::Pin;
 use core::slice;
-use core::str::{self};
+use core::str;
 
 use widestring::{U32CStr, U32CString, Utf32Str, Utf32String};
 
@@ -64,8 +64,9 @@ pub struct CxxWString {
 ///
 /// ```
 /// # use cxx::let_cxx_wstring;
-/// # let expression = "";
-/// let_cxx_string!(var = expression);
+/// # use widestring::Utf32String;
+/// # let expression = Utf32String::new();
+/// let_cxx_wstring!(var = expression);
 /// ```
 ///
 /// The `expression` may have any type that implements `AsRef<[char]>`.
@@ -77,11 +78,12 @@ pub struct CxxWString {
 ///
 /// ```
 /// use cxx::{let_cxx_wstring, CxxWString};
+/// use widestring::Utf32String;
 ///
 /// fn f(s: &CxxWString) {/* ... */}
 ///
 /// fn main() {
-///     let_cxx_wstring!(s = "example");
+///     let_cxx_wstring!(s = Utf32String::from("example"));
 ///     f(&s);
 /// }
 /// ```
