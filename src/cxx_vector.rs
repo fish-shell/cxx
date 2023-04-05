@@ -4,6 +4,7 @@
 use crate::extern_type::ExternType;
 use crate::kind::Trivial;
 use crate::string::CxxString;
+use crate::wstring::CxxWString;
 use core::ffi::c_void;
 use core::fmt::{self, Debug};
 use core::iter::FusedIterator;
@@ -490,3 +491,4 @@ impl_vector_element_for_primitive!(f32);
 impl_vector_element_for_primitive!(f64);
 
 impl_vector_element!(opaque, "string", "CxxString", CxxString);
+impl_vector_element!(opaque, "string", "CxxWString", CxxWString);

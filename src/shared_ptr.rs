@@ -1,8 +1,8 @@
 use crate::fmt::display;
 use crate::kind::Trivial;
 use crate::string::CxxString;
-use crate::wstring::CxxWString;
 use crate::weak_ptr::{WeakPtr, WeakPtrTarget};
+use crate::wstring::CxxWString;
 use crate::ExternType;
 use core::ffi::c_void;
 use core::fmt::{self, Debug, Display};
