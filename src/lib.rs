@@ -483,9 +483,6 @@ pub use cxxbridge_macro::bridge;
 /// import and use `CxxString`.
 pub type String = CxxString;
 
-/// Synonym for `CxxWString`.
-pub type WString = CxxWString;
-
 /// Synonym for `CxxVector`.
 ///
 /// To avoid confusion with Rust's standard library vector you probably
